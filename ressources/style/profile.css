@@ -1,0 +1,122 @@
+#mapholder{
+	text-align: center;
+}
+.error{
+	color: red;
+}
+#love{
+	background-color: pink;
+	border-radius: 40px;
+	text-align:center;
+	color: red;
+	padding: 10px;
+	overflow: hidden;
+/*	cursor: pointer;*/
+}
+#likebtn{
+    color: red;
+    background-color: pink;
+    border: unset;
+    cursor: pointer;
+}
+.imgvisit{
+	margin:10px;
+}
+#visited{
+	height: 400px;
+	overflow-y: auto;
+}
+#likes{
+	height: 400px;
+	overflow-y: auto;
+}
+#profile-raw{
+	width:100%;
+}
+#bio{
+	 border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  padding: 10px;
+}
+#container{
+/*	padding-top:200px !important;
+*/
+margin-top:200px;
+margin-bottom: 100px;
+}
+.pic{
+	cursor: pointer;
+	/*margin: 10px;*/
+}
+.row{
+	justify-content: center;
+}
+#managepic{
+	text-align: center;
+	margin-right: 40px;
+}
+.col-6 img{
+	width: 100%;
+	height: auto;
+	max-width: 260px;
+	max-height: 200px;
+}
+.col-3 img{
+	width: 80%;
+	height: auto;
+	max-width: 260px;
+	max-height: 200px;
+}
+#userinfo{
+	align-items: unset;
+}
+#gender input{
+	margin-left:10px;
+}
+.close {
+  color: red;
+  position: relative;
+  height: 0px;
+  right: 5%;
+  font-size: 33px;
+}
+.close:hover,
+.close:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+label.me
+{
+	margin: 10px;
+	/*height: 200px;
+    width: 250px;*/
+	cursor: pointer;
+}
+input.profile_img
+{
+	opacity: 0;
+	position: absolute;
+	z-index: -1;
+	display: none;
+}
+#jenova{
+	display: none;
+}
+#spanprof{
+	right: 25%;
+	bottom: 210px;
+}
+div.col-3 textarea{
+	width: 100%;
+	height:200px;
+}
+input[type="submit"]{
+	margin: 10px;
+}
+#pp{
+	border-radius: 40%;
+}
+#labelpp{
+	width: 100%;
+}

@@ -1,0 +1,323 @@
+#suggest_container{
+/*	padding-top:200px !important;
+*/
+margin-top:200px;
+margin-bottom: 100px;
+}
+.card{
+	margin-top : 20px;
+}
+.form-group{
+  margin: 8px;
+}
+#settingscontainer{
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  padding: 30px;
+
+}
+/*.profil{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+	height: 350px;
+}
+.profil img {
+	width: 90%;
+	height: auto;
+	margin: 10px;
+	max-height: 70%;
+}*/
+#suggest_container.row{
+
+}
+.card-text{
+	max-height: 200px;
+	overflow-y: auto;
+}
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: black;
+  font-weight: bold;
+  font-size: 40px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+#pagination{
+  padding-top: 40px;
+  justify-content: center;
+  margin-top: unset;
+  flex-direction:row;
+}
+#pagi-number{
+	width: 100px;
+	text-align: center;
+}
+.pagi{
+  position: unset;
+  color: black;
+  margin-top:unset;
+ /* margin-left:50px;*/
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(88, 84, 84, 0.8);
+}
+
+
+
+body {
+  color: #404040;
+  font: 100 1em/150% "proxima-nova", Helvetica, sans-serif;
+}
+
+.wrapper{
+  max-width: 1200px;
+  margin: auto;
+  //border: 1px solid red;
+}
+
+h1, h2, h3, h4 {  
+  font-weight: 900;
+  color: #333;
+  margin: 1.5em 0 0.5em;
+}
+
+h1 {font-size: 2em;}
+h2 {font-size: 1.8em;}
+h3 {font-size: 1.5em;}
+h4 {font-size: 1.3em;}
+
+strong {font-weight: 600;}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: $demoMain;
+}
+
+/*Basic Grid Styles*/
+.Grid {
+  display: flex;
+  flex-flow: row; 
+  flex-wrap: wrap;
+}
+.u-textCenter {
+ text-align: center;
+}
+.Grid-cell {
+  flex: 1;
+}
+
+.Demo {
+  padding: .8em 1em 0;
+  margin-bottom: 1em;
+  background: $demoMain;
+  transition: background-color 0.3s ease;
+  border: 1px solid $demoBorder;
+  border-radius: 3px;
+  &:after {
+    content: "";
+    display: block;
+    margin-top: .8em;
+    height: 1px;
+   }
+  &:hover {
+    background: $demoMainDark;
+  }
+}
+
+.Demo.Holly {
+    background: $demoHolly;
+    &:hover {
+      background: $demoHollyDark;
+    }
+  }
+// Grid Style Modifiers
+
+/* With gutters*/
+$gutter: 1em;
+.Grid--gutters {
+  margin-left: -$gutter;
+  .Grid-cell {
+    padding-left: $gutter;
+  }
+  .Grid--nested {
+    .Grid-cell:first-of-type {
+      .Demo {
+        margin-right: 1em;
+      }
+    }
+  }  
+}
+/* Justify per row*/
+.Grid--right {
+  justify-content: flex-end;
+}
+.Grid--center {
+  justify-content: center;
+}
+ 
+/* Alignment per row */
+.Grid--top {
+  align-items: flex-start;
+}
+.Grid--bottom {
+  align-items: flex-end;
+}
+.Grid--center {
+  align-items: center;
+}
+
+/* Alignment per cell */
+.Grid-cell--top {
+  align-self: flex-start;
+}
+.Grid-cell--bottom {
+  align-self: flex-end;
+}
+.Grid-cell--center {
+  align-self: center;
+}
+
+// Menu
+.navigation {
+  list-style: none;  
+  /*background: deepskyblue;*/
+  background: $demoHolly;
+  margin: 0 0 1em;
+  border: 1px solid $demoBorder;
+  border-radius: 3px;
+
+  display: flex;
+  
+  -webkit-flex-flow: row wrap;
+  justify-content: flex-end;
+    a {
+      text-decoration: none;
+      display: block;
+      padding: 1em;
+      color: #333;
+      &:hover {
+        background: darken($demoHolly, 10%);
+        border-radius:3px;
+      }
+    }
+  &:hover {
+    background: $demoHollyDark;
+  }
+}
+
+@media all and (max-width: 800px) {
+  .navigation {
+    justify-content: space-around;
+  }
+}
+ 
+@media all and (max-width: 600px) {
+  .navigation {
+    -webkit-flex-flow: column wrap;
+    flex-flow: column wrap;
+    padding: 0;
+    a { 
+      text-align: center; 
+      padding: 10px;
+      border-top: 1px solid rgba(255,255,255,0.3); 
+      border-bottom: 1px solid rgba(0,0,0,0.1); 
+    } 
+    li:last-of-type a {
+      border-bottom: none;
+    }
+  }   
+}
+
+
+/*===========================================*/
+/* Base classes for all media - Mobile first */
+.Grid--cols-3 > .Grid-cell {
+  flex: 0 0 100%; 
+}
+
+.Grid--holly-grail {
+  .aside, .main {
+    flex: 1 100%;
+  }
+}
+
+/* One of -- columns*/
+.Grid--1of3 > .Grid-cell:first-of-type{
+  flex: 0 0 100%;
+}
+
+
+.Grid--fit > .Grid-cell {
+  flex: 1;
+}
+.Grid--full > .Grid-cell {
+  flex: 0 0 100%;
+}
+
+/* Tablet (medium) screens */
+@media (min-width: 30em) {
+  .Grid--holly-grail {
+    .aside {
+      flex: 1 calc(25% - #{$gutter});
+    }
+  }
+  .Grid--1of3 > .Grid-cell:first-of-type {
+    flex: 0 0 100%;
+  }
+}
+
+/* Large screens */
+@media (min-width: 48em) {
+  .Grid--cols-3 > .Grid-cell{
+    flex: 1;  
+  }
+  .Grid--holly-grail {
+    .main    { flex: 2; }
+    .aside   { flex: 1; }
+    .aside-1 { order: 1; } 
+    .main    { order: 2; }
+    .aside-2 { order: 3; }
+  }
+  .Grid--1of3 > .Grid-cell:first-of-type {
+    flex: 0 0 30%;
+  }
+  .Grid--gutters.Grid--nested {
+    .Grid-cell:first-of-type {
+      .Demo {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
