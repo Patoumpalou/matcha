@@ -3,22 +3,15 @@ include ('../model/inc.php');
 include('./../vendor/autoload.php');
 //include('./../vendor/spatie/geocoder/src/Geocoder.php')
 $css = "suggest";
-$title="Suggestions";
+$header="Suggestions";
 if (isset($_SESSION['id']))
 	$id = $_SESSION['id'];
 else
 	header("Location: http://localhost:8080/matcha/");
 $offset = 0; 
 $user_data = get_user_data($id, $conn);
-//var_dump($user_data);
-$restab = check_profile($user_data, $id, $conn);
+$restab = check_profile($user_data, $id, $conn); //verfie la completion du profil utilisateur 
 if (count($restab) != 0){
-	foreach ($restab as $miss)
-	{
-		var_dump($miss);
-		echo "<br>";
-	}
-	echo "you must fully complete your profile to acces to this feature";
 	$_SESSION['profil'] = false;
 	include('header.php');
 	include ('../view/no_suggest.php');
@@ -29,6 +22,7 @@ else{
 $my_coords = get_coords($user_data['location']);
 $suggest = get_suggest($id, $conn, $offset, $user_data);
 $suggest = make_distance($suggest, $my_coords['lat'], $my_coords['lon']); 
+$suggest = parse_suggest($suggest, $conn, $_SESSION['id']);
 $nb_pages = ceil(count($suggest) / 6); 
 if ($nb_pages == 0)
 	$nb_pages++;

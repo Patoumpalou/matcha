@@ -16,6 +16,8 @@ if (isset($_GET['code']))
 		$_SESSION["id"] = $user['id'];
 		$_SESSION['profile'] = false;
 		create_user_data($user['id'], $conn);
+		create_conns($conn, $_SESSION['id']);
+		update_conns($conn, $_SESSION['id'], date("Y-m-d H:i:s"), '1');
 		// update_user_data($conn, $user['nom'], "nom", $_SESSION["id"]);
 		// update_user_data($conn, $user['prenom'], "prenom", $_SESSION["id"]);
 		header("Location: http://localhost:8080/matcha/index.php");

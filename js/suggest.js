@@ -12,7 +12,6 @@ window.onkeyup = function(e){
 		if (btn !== null)
 			btn.click();
 	}
-
 }
 
 document.querySelector(".form-control").onchange = function(){

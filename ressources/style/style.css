@@ -61,6 +61,7 @@ html, body{
 	margin: 20px;
 }
 #footer{
+    z-index: 100;
 	background:#ccc;
 	position:fixed;
 	bottom:0;

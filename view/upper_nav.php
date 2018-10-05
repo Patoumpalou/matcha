@@ -7,6 +7,7 @@
 			{ 
 		?>
 			<span id="logged-in">Bonjour <?= $_SESSION['pseudo']?></span>
+			<a href="chat.php" id = "login">Chat</a>
 			<a href="suggest.php" id = "login">Suggestions</a>
 			<a href="profile.php" id="login">Profile</a>
 			<a href="settings.php" id="login">Reglages</a>

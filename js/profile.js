@@ -3,10 +3,24 @@ var x = document.getElementById("demo");
 var like = document.getElementById("love");
 if (like != null)
 {
-    console.log('fuck');
     like.onclick = function(){
         document.getElementById('formlove').submit();
     }
+}
+var match = document.querySelector('#match');
+if (match != null){
+        setTimeout(function(){ match.style= "opacity: 0.9;"; }, 1000);
+        setTimeout(function(){ match.style= "opacity: 0.8;"; }, 1500);
+        setTimeout(function(){ match.style= "opacity: 0.7;"; }, 2000);
+        setTimeout(function(){ match.style= "opacity: 0.6;"; }, 2500);
+        setTimeout(function(){ match.style= "opacity: 0.5;"; }, 3000);
+        setTimeout(function(){ match.style= "opacity: 0.4;"; }, 3500);
+        setTimeout(function(){ match.style= "opacity: 0.3;"; }, 4000);
+        setTimeout(function(){ match.style= "opacity: 0.2;"; }, 4500);
+        setTimeout(function(){ match.style= "opacity: 0.1;"; }, 5000);
+        setTimeout(function(){ match.style= "opacity: 0.0;"; }, 5500);
+        setTimeout(function(){ match.style="display:none;"; }, 6000);
+        ;
 }
 function del_img(img)
 {
@@ -40,8 +54,11 @@ else{
 // };
 //document.querySelectorAll('.pic').onclick = function();
 
-
-
+var unlike = document.querySelector(".dislike");
+if (unlike != null){
+    document.querySelector('#love').style = "background-color: grey;";
+    document.querySelector('#likebtn').style = "background-color: grey;";
+}
 
 
 function showPosition(position) {

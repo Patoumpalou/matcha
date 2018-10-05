@@ -1,0 +1,68 @@
+#contactcol{
+	padding-right: 0px;
+}
+#chatcol{
+	padding-left: 0px;
+	height: 100%;
+}
+.container-fluid{
+		height: 82%; 
+		/*height: 75%; */
+			width: 90%;
+	margin-top: 100px;
+	margin-bottom: 100px;
+	margin-left: 8%;
+	margin-right: 8%;
+}
+
+.matches{
+	padding: 10px;
+	text-align: center;
+}
+#contactcol a{
+	color: black;
+}
+#chatbox{
+	border: 1px solid rgba(0,0,0,.125);
+	border-radius: .25rem;
+	height: 100%;
+    width: 100%;
+}
+.chatrow{
+	height: 100%;
+}
+#contentbox{
+	padding: 2%;
+	height: 88%;
+	overflow-y: auto;
+	width: 100%;
+	list-style: none;
+}
+.here{
+	background-color: grey;
+}
+.chef{
+	margin-bottom: 0px;
+}
+ul{
+	list-style: none;
+	padding-left: 0;
+}
+.you{
+	text-align: right;
+}
+@media screen and (max-width: 600px) {
+  .contentbox {
+    font-size: 12px;
+  }
+}
+.badge-danger{
+	margin: auto;
+	padding: 7px;
+	max-width: 120px;
+	margin-right: 10px;
+}
+#contactcol .card {
+	overflow-x: auto;
+	flex-direction: row;
+}

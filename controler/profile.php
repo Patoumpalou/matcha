@@ -6,7 +6,6 @@ if (!$_SESSION["pseudo"])
 $css = "profile";
 $modif = 0;
 $errors = [];
-
 		
 $files = array("pic_file_1", "pic_file_2","pic_file_3","pic_file_4","pic_file_5");
 $pic_names = array("../ressources/uploaded_img/nopic.png", "../ressources/uploaded_img/nopic.png", "../ressources/uploaded_img/nopic.png", "../ressources/uploaded_img/nopic.png", "../ressources/uploaded_img/nopic.png");
@@ -14,6 +13,8 @@ $i = 0;
 if (isset($_GET['user'])){
 
 	$id = intval($_GET['user']);
+	if ($id == $_SESSION['id'])
+		header("Location: http://localhost:8080/matcha");		
 	if (($user_data = get_user_data($id, $conn)) == false)
 		header("Location: http://localhost:8080/matcha");
 	$user_tags = get_user_tags($conn, $id);	
@@ -21,9 +22,19 @@ if (isset($_GET['user'])){
 	$self = false;	
 	add_visit($conn, $_SESSION['id'], $id);
 	$like = check_like($conn, $_SESSION['id'], $id); // regarde si tu a liked le profil
-	$likeback = is_loving_you($conn, $_SESSION['id'], $id);
+	$match = check_like($conn, $id, $_SESSION['id']);
+	if ($match == true)
+		$likeback = "back";
+	else
+		$likeback = "";
+	$status = get_status($conn, $id);
+	if ($like == true && $match == true)
+		$beta = add_match($conn, $id, $_SESSION['id']); //si existe pas, cree et return true. Si existe return false;
+	else
+		$beta = false;
 }
 else{
+	$beta = false;
 	$id = $_SESSION['id'];
 	$user_data = get_user_data($id, $conn);
 	$user_tags = get_user_tags($conn, $id);	
@@ -33,13 +44,21 @@ else{
 	$likes = get_likes($conn, $id); // renvoie les id qui t'on liked
 
 }
+if (isset($_POST['black']) && $self == false)
+	add_or_del_unwanted($conn, $_SESSION['id'], $id, '1');
+if (isset($_POST['unblack']) && $self == false)
+	add_or_del_unwanted($conn, $_SESSION['id'], $id, '0');
 //var_dump($likes);
 if (isset($_POST['like']) && $self == false){
 	if (get_img_name_by_id_num($conn, $_SESSION['id'], '4') != false){
-		if ($like == false)
+		if ($like == false){
 			update_like($conn, $_SESSION['id'], $id, "add");
-		else if($like == true)
+		}
+		else if($like == true){
+			if ($match == true)
+				remove_match($conn, $id, $_SESSION['id']);
 			update_like($conn, $_SESSION['id'], $id, "delete");
+		}
 		header("Location: http://localhost:8080/matcha/controler/profile.php?user=" . $id);
 	}
 	else

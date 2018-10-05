@@ -27,6 +27,8 @@ if (isset($_POST['submit']) && $_POST['submit'] === "OK")
 				$_SESSION["id"] = $user['id'];
 				$_SESSION["option"] = true;
 				$_SESSION['email']= $user["email"];
+				create_conns($conn, $_SESSION['id']);
+				update_conns($conn, $_SESSION['id'], date("Y-m-d H:i:s"), '1');
 				header("Location: http://localhost:8080/matcha/index.php");
 			}
 		}

@@ -89,19 +89,75 @@ function parse_tags($string){
 	$tab = array_values($tab);
 	return $tab;
 }
-
+function parse_suggest($suggest, $conn, $id){
+	$unwanted = [];
+	$i = 0;
+	$result = [];
+	// recupere tous les id indesirables dans unwanted et dans liked
+	$sql = "SELECT * from unwanted where id_auteur = '$id'"; // les id_sujets que tu veux pas
+	$res = $conn->query($sql);
+	$row = $res->fetchAll();
+	foreach ($row as $value) {
+		$unwanted[$i] = $value['id_sujet'];
+		$i++;
+	}
+	$sql = "SELECT * from likes where id_author = '$id'";
+	$res = $conn->query($sql);
+	$row2 = $res->fetchAll();
+	foreach($row2 as $value){
+		$unwanted[$i] = $value['id_target'];
+		$i++;
+	}
+	$i = 0;
+	$unwanted = array_values(array_unique($unwanted));
+	foreach ($suggest as $key => $value) {
+		if (in_array($value['id'], $unwanted) == false)
+			$result[$i] = $suggest[$i];
+		$i++;
+	}
+	return array_values($result);
+}
 function make_distance($tab, $lat, $lon)
 {
 	$i = 0;
 	foreach($tab as $someone){
 		$distance = get_distance($someone['lat'], $lat, $someone['lon'], $lon);
-	//	echo $distance . "<br>";
 		$tab[$i]['km'] = $distance;
 		$i++;
-//		$tab[$i]['tags'] = get_user_tags($conn, $someone['id']);
 	}
-
 	return $tab;
+}
+function get_msgs($conn, $mid){
+	$sql = "SELECT * from messages where match_id = '$mid' order by udate";
+	if (!($res = $conn->query($sql)))
+		return false;
+	return $res->fetchAll();
+}
+function get_matches_id($conn, $id){
+	$sql = "SELECT id, small_id from matches where big_id = '$id'";
+	if (!($res = $conn->query($sql)))
+		return false;
+	$row = $res->fetchAll();
+	$sql = "SELECT id, big_id from matches where small_id = '$id'";
+	if (!($res = $conn->query($sql)))
+		return false;
+	$row2 = $res->fetchAll();
+	$res = array_merge($row, $row2);
+	return $res;
+}
+function get_status($conn, $id)
+{
+	$sql = "SELECT * from conns where id = '$id'";
+	if (!($res = $conn->query($sql)))
+		return false;
+	if ($res->rowCount() == 0)
+		return "Ne s'est jamais connecté";
+	$row = $res->fetch();
+	if ($row['status'] == '1')
+		return "En ligne";
+	$date = $row['ladate'];
+	$date = $date[8] . $date[9] . "/" . $date[5] . $date[6] . "/" . substr($date, 0, 4). " à " . $date[11] . $date[12] . "h" . $date[14] . $date[15];
+	return "Deconnecté depuis le ". $date;
 }
 function get_img_name_by_id_num($conn, $id, $num){
 	$sql = "SELECT name from img where uid = '" . $id . "' and num = '" . $num . "'";
@@ -110,15 +166,13 @@ function get_img_name_by_id_num($conn, $id, $num){
 	if ($res->rowCount() == 0)
 		return false;
 	$row = $res->fetch();
-//	echo $row['name'] . '\t' . $sql;
 	return $row[0];
-	
 }
 function get_suggest($id, $conn, $offset, $data)
 {
-	$margin = 30;
-	$total1 = intval($data['score']) - $margin;
-	$total2 = intval($data['score']) + $margin;
+	// $margin = 30;
+	// $total1 = intval($data['score']) - $margin;
+	// $total2 = intval($data['score']) + $margin;
 	$sexe = $data['sexe'];
 	$want = $data['want'];
 	if ($want == "both")
@@ -133,9 +187,8 @@ function get_suggest($id, $conn, $offset, $data)
 		$oppsex = "homme";
 	else
 		$oppsex = "homme";
-
-	$sql = "SELECT id, lat, lon, age, score from user_data where (sexe = '" . $sexwanted ."') and want = '$oppsex' and (score <= '$total2' or score >= '$total1')";
-//	echo $sql;
+	$sql = "SELECT id, lat, lon, age, score from user_data where (sexe = '" . $sexwanted ."') and want = '$oppsex'";
+	// " and (score <= '$total2' or score >= '$total1')";
 	if (!($res = $conn->query($sql)))
 		return false;
 	return $res->fetchAll();
@@ -148,7 +201,6 @@ function get_distance($lat1, $lat2, $lon1, $lon2) {
   $dist = acos($dist);
   $dist = rad2deg($dist);
   $miles = $dist * 60 * 1.1515;
-  
   return (round($miles * 1.609344));
 }
 function get_coords($address)
@@ -156,18 +208,14 @@ function get_coords($address)
 	$key = "AIzaSyDtnHLVfWMIe7h9cP2UIS559Jp_CgyUPhU";
 	$prepAddr = str_replace(' ','+',$address);
 	$url = "https://maps.google.com/maps/api/geocode/json?address=".urlencode($prepAddr)."&key=" . $key;
-	//echo $url;
 	$geocode=file_get_contents($url);
 	$res = json_decode($geocode);
-//	return $res;
-	//sleep(1);
 	if ($res->status == 'OK'){
 		$lat = $res->results[0]->geometry->location->lat;
 		$lon = $res->results[0]->geometry->location->lng;
 	}
-	else{
+	else
 		return false;
-	}	
 	return( (array('lat' => $lat, 'lon' => $lon) ));
 }
 function get_user_data($id, $conn)
@@ -231,19 +279,24 @@ function get_visits($conn, $myid)
 		$i++;
 	}
 	return $row;
-
 }
 function get_likes($conn, $id){
 	$sql = "SELECT * from likes where id_target = '$id'";
 	if (!($res = $conn->query($sql)))
 		return false;
-	// if ($res->rowCount() == 0)
-	// 	return false;
 	$row = $res->fetchAll();
 	foreach ($row as $key => $value) {
 		$row[$key]['img'] = get_img_name_by_id_num($conn, $value['id_author'], '4');
 	}
 	return $row;
+}
+function create_conns($conn, $id)
+{
+	$sql = "INSERT INTO conns(id) SELECT $id WHERE NOT EXISTS (SELECT * from conns where id = '$id')";
+	if (!($res = $conn->query($sql)))
+		return false;
+	else
+		return true;	
 }
 function create_user_data($id, $conn)
 {
@@ -253,6 +306,29 @@ function create_user_data($id, $conn)
 	else
 		return true;
 }
+function add_msg($conn, $data){
+	$sql = "INSERT INTO messages (content, id_author, name_author, match_id, udate) VALUES (
+	'" .$data['content']. "', '" .$data['id'] . "', '" .$data['prenom'] ."', '".$data['matchid']."', '".$data['date']. "') ";
+	if (!($res = $conn->query($sql)))
+		return false;
+	return true;
+}
+function add_match($conn, $id1, $id2){
+	if ($id1 > $id2){
+		$tmp =$id1;
+		$id1 = $id2;
+		$id2 = $tmp;
+	}
+	$sql = "SELECT * from matches where small_id = '$id1' and big_id = '$id2'";
+	if (!($res = $conn->query($sql)))
+		return false;
+	if ($res->rowCount() == 0){
+		$sql = "INSERT INTO matches(small_id, big_id) VALUES ('$id1', '$id2') ";
+		$conn->query($sql);
+		return true;
+	}
+	return false;
+}
 function add_tag($conn, $id, $tag)
 {
 	$sql = "INSERT INTO tags(name, uid) VALUES ('" . $tag . "', '" . $id . "') ";
@@ -260,7 +336,6 @@ function add_tag($conn, $id, $tag)
 		return false;
 	else
 		return true;
-
 }
 function add_inactif_user_to_db($user, $conn)
 {
@@ -288,11 +363,33 @@ function add_visit($conn, $myid, $id)
 	}
 	return true;
 }
+function add_or_del_unwanted($conn, $id_auteur, $id_sujet, $bool){
+	if ($bool == '0'){
+		$sql = "DELETE FROM `unwanted` WHERE id_auteur = '$id_auteur' and id_sujet = '$id_sujet'";
+	}
+	else if ($bool == '1'){
+		$sql = "INSERT INTO unwanted(id_auteur, id_sujet) values ('$id_auteur', '$id_sujet')";
+	}
+	if(!($res = $conn->query($sql)))
+		return false;
+	return true;
+}
+function update_msg($conn, $mid, $id){
+	$sql = "UPDATE messages SET seen = true where match_id = '$mid' and id_author = '$id'";
+	if(!($res = $conn->query($sql)))
+		return false;
+	return true;
+}
+function update_conns($conn, $id, $date, $bool)
+{
+	$sql = "UPDATE conns SET status = '$bool', ladate = '$date' where id = '$id'";
+	if(!($res = $conn->query($sql)))
+		return false;
+	return true;
+}
 function update_coords($conn, $id, $lat, $lon)
 {
-	// echo $lat . "\t" . $lon;
 	$sql = "UPDATE user_data SET lat = '$lat', lon = '$lon' where uid = '$id'";
-	echo $sql;
 	if(!($res = $conn->query($sql)))
 		return false;
 	return true;
@@ -357,13 +454,31 @@ function update_like($conn, $myid, $id, $str){
 		return false;
 	return true;
 }
-function is_loving_you($conn, $myid, $otherid){
-	$sql = "SELECT * from likes where id_target = '$myid' and id_author = '$otherid'";
+function check_unseen_msg($conn, $mid, $otherid){
+ 	$sql = "SELECT * from messages where match_id = '$mid' and seen = '0' and id_author = '$otherid'";
+ 	if (!($res = $conn->query($sql)))
+		return false;
+	if ($res->rowCount() == 0)
+		return false;
+	return true;
+
+}
+function check_actu($conn, $lastmsg, $mid){
+	$sql = "SELECT content from messages where match_id = '$mid' order by udate desc";
+	if (!($res = $conn->query($sql)))
+		return false;
+	$row = $res->fetch();
+	if (strcmp($row['content'], $lastmsg) != 0)
+		return true;
+	return false;
+}
+function check_if_bloqued($conn, $id_auteur, $id_sujet){
+	$sql = "SELECT * from unwanted where id_auteur = '$id_auteur' and id_sujet = '$id_sujet'";
 	if (!($res = $conn->query($sql)))
 		return false;
 	if ($res->rowCount() == 0)
-		return "";
-	return "back";
+		return false;
+	return true;
 }
 function check_like($conn, $myid, $id){
 	$sql = "SELECT * from likes where id_target = '$id' and id_author = '$myid'";
@@ -396,8 +511,6 @@ function check_profile($data, $id, $conn)
 		$miss['tags'] = "N'avez vous donc aucun interet ? remplis moi ces putains dinterets";
 	if (count($miss) == 0)
 		return null;
-	// check interests
-
 	return $miss;
 }
 function check_if_active($user, $conn)
@@ -431,11 +544,20 @@ function check_password($passwd)
 function check_email($email)
 {
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
-	{
   		return false; 
-	}
 	else
 		return true;
+}
+function remove_match($conn, $id1, $id2){
+	if ($id1 > $id2){
+		$tmp =$id1;
+		$id1 = $id2;
+		$id2 = $tmp;
+	}
+	$sql = "DELETE FROM matches where small_id = '$id1' and  big_id = '$id2'";
+	if (!($res = $conn->query($sql)))
+		return false;
+	return true;	
 }
 function remove_tag($conn, $id, $name)
 {

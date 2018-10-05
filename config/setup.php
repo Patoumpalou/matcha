@@ -37,13 +37,11 @@ try{
 	lat float NULL,
 	lon float NULL
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	
 	CREATE TABLE img (
 	id int NOT NULL PRIMARY KEY AUTO_INCREMENT, 
 	uid int NOT NULL, 
 	name varchar(255) NOT NULL, num int NOT NULL
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 	CREATE TABLE tags (
 	id int NOT NULL PRIMARY KEY AUTO_INCREMENT, 
 	uid int NOT NULL, 
@@ -55,13 +53,34 @@ try{
 	id_visit int NULL
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE matches (
-	id int NOT NULL PRIMARY KEY AUTO_INCREMENT
+	id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	small_id int not NULL,
+	big_id int not null
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE likes (
 	id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	id_target int NOT NULL,
 	id_author int NOT NULL
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE conns (
+	id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	status boolean DEFAULT NULL,
+	ladate datetime DEFAULT NULL
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE unwanted (
+	id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	id_auteur int default null, 
+	id_sujet int default null
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE messages (
+	id int not null primary key AUTO_INCREMENT,
+	content varchar(255) not null,
+	id_author int default null, 
+	name_author varchar(30) default null, 
+	match_id int default null,
+	udate datetime default null,
+	seen boolean not null default false
+	)ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 	$db->exec($sql);
 
 	// $seeder = new \tebazil\dbseeder\Seeder($db);
