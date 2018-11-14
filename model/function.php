@@ -28,10 +28,51 @@ function sort_by_tag($conn, $tab, $tags)
 	}
 	return $res;
 }
+function ft_radiogender($str){
+	$tab = [];
+	if ($str == 'homme')
+		$tab[0] = 'checked';
+	else
+		$tab[0] = '';
+	if ($str == 'femme')
+		$tab[1] = 'checked';
+	else
+		$tab[1] = '';
+	if ($str == 'autre')
+		$tab[2] = 'checked';
+	else
+		$tab[2] = '';
+	return $tab;
+}
+function ft_optionorientation($str){
+	$tab = [];
+	if ($str == 'Heterosexuel')
+		$tab[0] = 'selected';
+	else
+		$tab[0] = '';
+	if ($str == 'Homosexuel')
+		$tab[1] = 'selected';
+	else
+		$tab[1] = '';
+	if ($str == 'Bisexuel')
+		$tab[2] = 'selected';
+	else
+		$tab[2] = '';
+	if ($str == 'Pansexuel')
+		$tab[3] = 'selected';
+	else
+		$tab[3] = '';
+	if ($str == 'Sapiosexuel')
+		$tab[4] = 'selected';
+	else
+		$tab[4] = '';
+	return $tab;
+}
 function applyfilters($data, $tab, $conn){
 	$res = [];
 	$i = 0;
-	if($data['tag'][0] != "")
+	// if(count($data['tag']) != 0)
+	if(isset($data['tag'][0]) && $data['tag'][0] != "")
 	{
 		$my_tags = $data['tag']; 
 		$tmp = 0;
@@ -43,6 +84,8 @@ function applyfilters($data, $tab, $conn){
 			}
 		}
 		$tab = $res;
+		unset($res);
+		$res = [];
 		$i = 0;
 	}
 	foreach($tab as $someone){
@@ -53,6 +96,20 @@ function applyfilters($data, $tab, $conn){
 		}	
 	}
 	return $res;
+}
+function parse_gender($str){
+	if (strcmp($str, 'Heterosexuel') == 0)
+		return true;
+	if (strcmp($str, 'Homosexuel') == 0)
+		return true;
+	if (strcmp($str, 'Bisexuel') == 0)
+		return true;
+	if (strcmp($str, 'Pansexuel') == 0)
+		return true;
+	if (strcmp($str, 'Sapiosexuel') == 0)
+		return true;
+	else
+		return false;
 }
 function parse_data($data){
 	if ($data['age2'] < $data['age']){
@@ -290,6 +347,20 @@ function get_likes($conn, $id){
 	}
 	return $row;
 }
+function get_notifs($conn, $id){
+	$sql = "SELECT * from notifs where id_target = '$id' and seen = '0'";
+	if (!($res = $conn->query($sql)))
+		return false;
+	$row = $res->fetchAll();
+	return $row;
+}
+function get_all_notifs($conn, $id){
+	$sql = "SELECT * from notifs where id_target = '$id' ORDER BY id DESC ";
+	if (!($res = $conn->query($sql)))
+		return false;
+	$row = $res->fetchAll();
+	return $row;
+}
 function create_conns($conn, $id)
 {
 	$sql = "INSERT INTO conns(id) SELECT $id WHERE NOT EXISTS (SELECT * from conns where id = '$id')";
@@ -298,9 +369,37 @@ function create_conns($conn, $id)
 	else
 		return true;	
 }
-function create_user_data($id, $conn)
+function create_user_data($user, $conn)
 {
-	$sql = "INSERT INTO user_data(id) VALUES ('" . $id . "')";
+	$sql = "SELECT * FROM user_data where id = '". $user['id'] . "'";
+	$res = $conn->query($sql);
+	if ($res->rowCount() != 0)
+		return false;
+	$sql = "INSERT INTO user_data(id, age, sexe) VALUES ('" . $user['id'] . "','".$user['age']."','".$user['sex']."')";
+	if (!($res = $conn->query($sql)))
+		return false;
+	else
+		return true;
+}
+
+function add_notif($conn, $id_target, $id_auth, $subject){
+	if (check_signaled($conn, $id_auth) == true)
+		return false;
+	if ($subject == 'match'){
+		$sql = "SELECT id from notifs where id_target = '$id_target' and id_auth = '$id_auth' and subject = '$subject' and seen = '0'";
+		if (!($res = $conn->query($sql)))
+			return false;
+		if ($res->rowCount() > 0)
+			return true;
+	}
+	if ($subject == 'visit'){
+		$sql = "SELECT id from notifs where id_target = '$id_target' and id_auth = '$id_auth' and subject = '$subject'";
+		if (!($res = $conn->query($sql)))
+			return false;
+		if ($res->rowCount() > 0)
+			return true;
+	}
+	$sql = "INSERT INTO notifs(id_target, id_auth, subject) VALUES ('$id_target', '$id_auth', '$subject') ";
 	if (!($res = $conn->query($sql)))
 		return false;
 	else
@@ -374,6 +473,32 @@ function add_or_del_unwanted($conn, $id_auteur, $id_sujet, $bool){
 		return false;
 	return true;
 }
+function update_score($conn, $id, $val, $str){
+	// if ($str == 'more'){
+	// 	$sql = "UPDATE user_data set score = score + $val where id = '$id'";
+	// }
+	// else if ($str == 'less'){
+	// 	$sql = "UPDATE user_data set score = score - $val where id = '$id'";
+	// }
+	// else if ($str == 'visit'){
+	// 	$sql = "SELECT * from visits where id_visited = '$id' and id_visit = '$val'";
+	// 	$res = $conn->query($sql);
+	// 	if ($res->rowCount() == 0)
+	// 		update_score($conn, $id, '1', 'more');
+	// 	return true;
+	// }
+	// else
+	// 	return false;
+	// if(!($res = $conn->query($sql)))
+	// 	return false;
+	return true;
+}
+function update_notifs($conn, $id){
+	$sql = "UPDATE notifs set seen = true where id_target = '$id'";
+	if(!($res = $conn->query($sql)))
+		return false;
+	return true;
+}
 function update_msg($conn, $mid, $id){
 	$sql = "UPDATE messages SET seen = true where match_id = '$mid' and id_author = '$id'";
 	if(!($res = $conn->query($sql)))
@@ -389,7 +514,7 @@ function update_conns($conn, $id, $date, $bool)
 }
 function update_coords($conn, $id, $lat, $lon)
 {
-	$sql = "UPDATE user_data SET lat = '$lat', lon = '$lon' where uid = '$id'";
+	$sql = "UPDATE user_data SET lat = '$lat', lon = '$lon' where id = '$id'";
 	if(!($res = $conn->query($sql)))
 		return false;
 	return true;
@@ -454,11 +579,32 @@ function update_like($conn, $myid, $id, $str){
 		return false;
 	return true;
 }
+function check_log($conn, $id, $date){
+	$sql = "SELECT * from conns where id = '$id' and status = '0'";
+ 	if (!($res = $conn->query($sql)))
+		return false;
+	if ($res->rowCount() == 0){
+		return false;
+	}
+	$sql = "UPDATE conns set status = '1' and ladate = '$date' where id = '$id'";
+ 	if (!($res = $conn->query($sql)))
+		return false;
+	return true;
+}
 function check_unseen_msg($conn, $mid, $otherid){
  	$sql = "SELECT * from messages where match_id = '$mid' and seen = '0' and id_author = '$otherid'";
  	if (!($res = $conn->query($sql)))
 		return false;
 	if ($res->rowCount() == 0)
+		return false;
+	return true;
+
+}
+function check_signaled($conn, $id){
+ 	$sql = "SELECT * from user_data where id = '$id' and signaled = 'true'";
+ 	if (!($res = $conn->query($sql)))
+		return false;
+	if ($res->rowCount() != 0)
 		return false;
 	return true;
 

@@ -1,15 +1,9 @@
 <?php 
 
-
+if (isset($_SESSION['id'])){
 ?>
+	<script type="text/javascript" src="../js/main.js"></script>
+<?php } ?>
 <div id ="footer">
-	<div>
-		<img src="../ressources/img/42_Logo.png">
-	</div>
-	<div>
-		<p>Matcha est un magnifique site réalisé par Pierre Houviez. Il merite amplement 125/125.</p>
-	</div>
-	<div>
-		<p>This is a footer</p>
-	</div>
+<p>Website made by Pihouvie, with love</p>
 </div>

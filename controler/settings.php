@@ -4,13 +4,15 @@ $header = "Reglages";
 $errors = [];
 $css = "settings";
 $ok = 0;
-
+$areglages = "active";
+if (!isset($_SESSION['id']))
+	header("Location: ../index.php");
 if (isset($_POST['submit']) && $_POST['submit'] == "OK")
 {
 	$user = get_user_by($conn, $_SESSION["pseudo"], 'pseudo');
 	if($_POST['email'] !== "" && strcmp($user['email'], $_POST['email']) != 0) 
 	{
-		$email = htmlspecialchars($_POST['email']);
+		$email = filter_var($_POST['email'], FILTER_SANITIZE_STRIPPED);
 		if (!check_email($email))
 			$errors['00'] = "Email invalide";
 		// checker si email pas deja pris.     faire de meme pour les mdp sur tout le site ? 
@@ -25,7 +27,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == "OK")
 	}
 	if ($_POST['pseudo'] !== "") 
 	{
-		$pseudo = htmlspecialchars($_POST['pseudo']);
+		$pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRIPPED);
 		if (get_user_by($conn, $pseudo, 'pseudo') != NULL)
 			$errors['2'] = "Pseudo deja pris";
 		else if (strcmp($user['pseudo'], $_POST['pseudo']) == 0)
@@ -43,12 +45,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == "OK")
 	{
 		if ($_POST['oldpasswd'] !== "")
 		{
-			$oldpasswd = htmlspecialchars(($_POST['oldpasswd']));
+			$oldpasswd = filter_var($_POST['oldpasswd'], FILTER_SANITIZE_STRIPPED);
 			$user = get_user_by($conn, $_SESSION['pseudo'], 'pseudo');
 			$hashed = hash("whirlpool", $oldpasswd);
 			if (strcmp($hashed, $user['password']) == 0)
 			{
-				$passwd = htmlspecialchars($_POST['passwd']);
+				$passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRIPPED);
 				$passwd_hashed = hash("whirlpool", $passwd);
 				if (strcmp($passwd_hashed, $user['password']) != 0)
 				{
@@ -75,7 +77,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == "OK")
 		header("Location: settings.php?sucess=true");
 //	header("Location: settings.php");
 }
+
 ?>
 <?php include("header.php"); 
-include('../view/settings.php');
+include('../view/page_settings.php');
 ?>

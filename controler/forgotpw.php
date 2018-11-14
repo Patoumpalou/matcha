@@ -2,15 +2,17 @@
 include("../model/inc.php");
 $header = "matcha";
 $css ="forgotpw";
-$ok = false;
+
 $errors = [];
+
+$ok = false;
 if (isset($_POST['submit']) && $_POST['submit'] === "OK")
 {
 	if ($_POST['pseudo'] !== "" && $_POST['email'] !== "")
 	{
 		$user = [];
-		$user['pseudo'] = htmlspecialchars($_POST['pseudo']);
-		$user['email'] = htmlspecialchars($_POST['email']);
+		$user['pseudo'] = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRIPPED);
+		$user['email'] = filter_var($_POST['email'], FILTER_SANITIZE_STRIPPED);
 		if (!($user_db = get_user_by($conn, $user['pseudo'], "pseudo")))
 		{
 			$errors['pseudo'] = 'pseudo inconnu';
@@ -45,5 +47,5 @@ if (isset($_POST['submit']) && $_POST['submit'] === "OK")
 		$errors['plop'] = "Veuillez remplir tous les champs";
 }
 include( "header.php") ;
-include('../view/forgotpw.php');
+include('../view/page_forgotpw.php');
 ?>

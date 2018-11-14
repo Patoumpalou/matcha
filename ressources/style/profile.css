@@ -5,6 +5,7 @@
     background-color: grey;
     margin-top: 100px;
 }
+b { font-weight: bold; }
 #match img{
 	width: 100%;
 }
@@ -18,17 +19,19 @@
 	color: red;
 }
 #love{
-	background-color: pink;
+	border: 1px solid rgba(0,0,0,.125);
+    border-color: red;
 	border-radius: 40px;
 	text-align:center;
 	color: red;
 	padding: 10px;
 	overflow: hidden;
+	max-width: 170px;
 /*	cursor: pointer;*/
 }
 #likebtn{
     color: red;
-    background-color: pink;
+   background-color: unset;
     border: unset;
     cursor: pointer;
 }
@@ -45,6 +48,8 @@
 }
 #profile-raw{
 	width:100%;
+	margin: auto;
+	background-color: #d6cece;
 }
 #bio{
 	 border: 1px solid rgba(0,0,0,.125);
@@ -54,7 +59,7 @@
 #container{
 /*	padding-top:200px !important;
 */
-margin-top:200px;
+margin-top:50px;
 margin-bottom: 100px;
 }
 .pic{
@@ -86,11 +91,16 @@ margin-bottom: 100px;
 #gender input{
 	margin-left:10px;
 }
+
+#spanprof{
+	/*right: 25%;
+	bottom: 210px;*/
+}
 .close {
   color: red;
-  position: relative;
+  /*position: relative;*/
   height: 0px;
-  right: 5%;
+  /*right: 5%;*/
   font-size: 33px;
 }
 .close:hover,
@@ -115,10 +125,6 @@ input.profile_img
 }
 #jenova{
 	display: none;
-}
-#spanprof{
-	right: 25%;
-	bottom: 210px;
 }
 div.col-3 textarea{
 	width: 100%;

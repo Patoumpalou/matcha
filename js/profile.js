@@ -54,11 +54,11 @@ else{
 // };
 //document.querySelectorAll('.pic').onclick = function();
 
-var unlike = document.querySelector(".dislike");
-if (unlike != null){
-    document.querySelector('#love').style = "background-color: grey;";
-    document.querySelector('#likebtn').style = "background-color: grey;";
-}
+// var unlike = document.querySelector(".dislike");
+// if (unlike != null){
+//     document.querySelector('#love').style = "background-color: grey;";
+//     document.querySelector('#likebtn').style = "background-color: grey;";
+// }
 
 
 function showPosition(position) {
@@ -131,7 +131,7 @@ function  getReverseGeocodingData_bis(lat, lng){
         // This is checking to see if the Geoeode Status is OK before proceeding
         if (status == google.maps.GeocoderStatus.OK) {
             var address = (results[0].formatted_address);
-            console.log(address);
+            // console.log(address);
             document.getElementById("ineedloc").value = address;
         }
     });

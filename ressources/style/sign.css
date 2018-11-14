@@ -1,0 +1,149 @@
+.thanks{
+	padding-top:100px;
+	/*height:70%;*/
+	width: 55%;
+	margin:auto;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+}
+
+form{
+	/*justify-content: left;*/
+/*	width: 100%;
+	height: 600px;
+	margin-top: 100px;
+	margin-top: unset;
+	margin-bottom: 50px;*/
+	/*color: white;*/
+	
+}
+
+
+/*form{width: 100%;
+	height: 600px;
+	margin-top: 100px;
+		margin-bottom: 50px;
+
+}*/
+h2{
+	margin: unset;
+}
+@media screen and (max-width: 600px) {
+ h2{
+ 	font-size: 1.3em;
+ }
+ h4{
+ 	font-size: 1em;
+ }
+ form{
+ 	/*flex-direction: unset;*/
+	align-items: unset;
+	justify-content: unset;
+ }
+ 
+}
+@media screen and (max-width: 1000px) {
+	.container-fluid{
+		width: 100% !important;
+		/*margin-top: 0px;*/
+	}
+	.undernav{
+		margin-bottom: 0px !important;
+	}
+}
+#data-container{
+	margin: auto;
+	justify-content: left;
+}
+#data-container .col-6-md{
+
+}
+.btn {
+	margin: auto;
+	/*max-width: 200px;*/
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+#activelink{
+	background-color: #96092b;
+}
+.undernav{
+	border-radius: 6px;
+	text-align: center;
+	padding: 20px;
+	background-color: #e8e8e8;
+	margin-bottom: 60px;
+	cursor: pointer;
+}
+.undernav a{
+	/*position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;*/
+}
+.headerform{
+	color: whitesmoke;
+}
+.container-fluid{
+	border-radius: 8px;
+	margin-top: 60px;
+	padding: 14px;
+	margin: auto;
+	width: 80%;
+	background-color: whitesmoke;
+	border: 2px solid transparent;
+	border-color: grey;
+	margin-bottom: 60px;
+}
+
+.form_col {
+    display: inline-block;
+    margin-right: 15px;
+    padding: 3px 0px;
+    width: 200px;
+    min-height: 1px;
+    text-align: right;
+}
+	
+input {
+	padding: 2px;
+	border: 1px solid #CCC;
+	border-radius: 2px;
+	outline: none; /* Retire les bordures appliquées par certains navigateurs (Chrome notamment) lors du focus des éléments <input> */
+}
+	
+input:focus {
+	border-color: rgba(82, 168, 236, 0.75);
+	box-shadow: 0 0 8px rgba(82, 168, 236, 0.5);
+}
+	
+.correct {
+	border-color: rgba(68, 191, 68, 0.75);
+}
+	
+.correct:focus {
+	border-color: rgba(68, 191, 68, 0.75);
+	box-shadow: 0 0 8px rgba(68, 191, 68, 0.5);
+}
+	
+.incorrect {
+	border-color: rgba(191, 68, 68, 0.75);
+}
+	
+.incorrect:focus {
+	border-color: rgba(191, 68, 68, 0.75);
+	box-shadow: 0 0 8px rgba(191, 68, 68, 0.5);
+}
+	
+.tooltip {
+	position: unset;
+	opacity: 100;
+	display: inline-block;
+	margin-left: 20px;
+	padding: 2px 4px;
+	border: 1px solid #555;
+	background-color: #CCC;
+	border-radius: 4px;
+}

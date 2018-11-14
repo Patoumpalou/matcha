@@ -1,0 +1,7 @@
+{
+    "require": {
+        "tebazil/db-seeder": "^0.0.0",
+        "spatie/geocoder": "^3.3",
+        "symfony/polyfill-mbstring": "^1.9"
+    }
+}

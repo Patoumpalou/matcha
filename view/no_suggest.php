@@ -6,9 +6,9 @@
 			</div>
 			<div class="col-10">
 				<h2>
-					va bien niquer ta mere et rempli ton profile de gland
+					Oh non... ton profil n'est pas complet :'( Va vite le remplir !
 				</h2>
-				<h3>Il vous manque : </h3>
+				<h3>Il te manque : </h3>
 				<?php foreach($restab as $miss){?>
 					<h4>- <?=$miss?></h4>
 				<?php }?>

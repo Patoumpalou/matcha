@@ -14,10 +14,6 @@ window.onkeyup = function(e){
 	}
 }
 
-document.querySelector(".form-control").onchange = function(){
-	
-	document.querySelector("#settingsform").submit();
-}
 document.querySelector('body').onload = function(){
 	var bob = document.querySelectorAll("input[class='multirange ghost']");
 	bob[0].name = 'age2';
@@ -40,8 +36,6 @@ function update_age(value){
 	p_age.innerHTML = str;
 }
 function update_score(value){
-	console.log(value);
-	console.log(value.length);
 	var p_score = document.querySelector('#p_score');
 	if (value[1] == ',')
 		value = '0' + value;

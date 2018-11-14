@@ -3,13 +3,13 @@ include("database.php");
 //include("../model/function.php");
 include('./../vendor/autoload.php');
 include('./../vendor/fzaninotto/faker/src/autoload.php');
-
+// echo "<a href='../index.php'>retour a la maison</a>";
 try{
 	$count = 750;
 	$db = new PDO($DB_DSN1, $DB_USER, $DB_PASSWORD,  array(
         PDO::ATTR_PERSISTENT => true));
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql = "create database matcha";
+	$sql = "drop database if exists matcha; create database matcha";
 	$db->exec($sql);
 	$db = new PDO($DB_DSN2, $DB_USER, $DB_PASSWORD);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);	
@@ -35,7 +35,8 @@ try{
 	score FLOAT NULL default '50',
 	want varchar(30) default null,
 	lat float NULL,
-	lon float NULL
+	lon float NULL,
+	signaled boolean default false
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	CREATE TABLE img (
 	id int NOT NULL PRIMARY KEY AUTO_INCREMENT, 
@@ -80,6 +81,13 @@ try{
 	match_id int default null,
 	udate datetime default null,
 	seen boolean not null default false
+	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE notifs (
+	id int not null primary key AUTO_INCREMENT,
+	id_target int not null, 
+	id_auth int not null, 
+	seen boolean not null default false,
+	subject varchar(255) not null
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 	$db->exec($sql);
 
@@ -114,7 +122,7 @@ try{
 		$bio = $faker->paragraph($nbSentences = 3, $variableNbSentences = true);
 		$score = $faker->numberBetween($min = 0, $max = 100);
 		$want = $faker->randomElement($array = array ('femme','homme', 'both', 'any'));
-		$sexe = $faker->randomElement($array = array ('homme','femme','autre'));
+		$sexe = $faker->randomElement($array = array ('homme','femme'));
 		$age = $faker->numberBetween($min = 14, $max = 70);
 		$orientation = $faker->randomElement($array = array ('Heterosexuel','Homosexuel','Bisexuel', 'Pansexuel', 'Sapiosexuel'));
 		$db->query("INSERT INTO user_data (lat, lon, age, sexe, location, orientation, bio, score, want) VALUES 
@@ -154,7 +162,11 @@ try{
     $stmt = $db->prepare("SET FOREIGN_KEY_CHECKS=1");
     $stmt->execute();
 
-    $sql = "INSERT into users ( pseudo, email, nom, prenom, actif, password) values ('qweqwe','patoumpalou@hotmail.fr','leponge','bob','1','98ce74fe4eacbb70cf16920714135c61a838912663dbe0f3e3b60268253a8da870c1f8d8b36ddd557029688729b93a59945fb635c515e4a66986d434bca0cb6b');
+    $sql = "INSERT into users ( pseudo, email, nom, prenom, actif, password) values ('qweqwe','patoumpalouu@hotmail.fr','leponge','bob','1','98ce74fe4eacbb70cf16920714135c61a838912663dbe0f3e3b60268253a8da870c1f8d8b36ddd557029688729b93a59945fb635c515e4a66986d434bca0cb6b');
+    INSERT INTO user_data (lat, lon, want, location, bio, score, sexe, age, orientation) VALUES ('48.8966491', '2.31834989999993', 'femme', '96 Boulevard Bessières, 75017 Paris, France','asdasd', '50', 'homme', '32', 'Heterosexuel');
+    INSERT INTO tags(uid, name) values ('751', '#alcool')";
+    $db->exec($sql);
+    $sql = "INSERT into users ( pseudo, email, nom, prenom, actif, password) values ('qwe','patoumpalouu@hotmail.fr','Jackob','Alfonse','1','354d50956ab1f07bceda7fb2bb53c3e08dc943948912c662fbf9b23aa1bb86d188bd69796c955381435ac94d2092b936da8f84afb5539bb72e4d84b1f7f751b6');
     INSERT INTO user_data (lat, lon, want, location, bio, score, sexe, age, orientation) VALUES ('48.8966491', '2.31834989999993', 'femme', '96 Boulevard Bessières, 75017 Paris, France','asdasd', '50', 'homme', '32', 'Heterosexuel');
     INSERT INTO tags(uid, name) values ('751', '#alcool')";
     $db->exec($sql);

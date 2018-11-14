@@ -4,6 +4,7 @@ include('./../vendor/autoload.php');
 //include('./../vendor/spatie/geocoder/src/Geocoder.php')
 $css = "suggest";
 $header="Suggestions";
+$asuggest = 'active';
 if (isset($_SESSION['id']))
 	$id = $_SESSION['id'];
 else
@@ -55,12 +56,42 @@ $fage = '';
 $floc = '';
 $fpop = '';
 $ftag = '';
-if (isset($_SESSION['sortby']) && !isset($_POST['sort']))
+if (isset($_POST['settingsform'])){
+		// echo "trois";
+
+	$data = [];
+	$data['age'] = filter_var($_POST['age'], FILTER_SANITIZE_STRIPPED);
+	$data['age2']  = filter_var($_POST['age2'], FILTER_SANITIZE_STRIPPED);
+	$data['distance'] = filter_var($_POST['distance'], FILTER_SANITIZE_STRIPPED);
+	$data['pop'] = filter_var($_POST['pop'], FILTER_SANITIZE_STRIPPED);
+	$data['pop2'] = filter_var($_POST['pop2'], FILTER_SANITIZE_STRIPPED);
+	$data['tag'] = parse_tags(filter_var($_POST['tag'], FILTER_SANITIZE_STRIPPED));
+	$_SESSION['data'] = parse_data($data);
+ 	$tmp = filter_var($_POST['sort'], FILTER_SANITIZE_STRIPPED);
+ 	// var_dump($tmp);
+ 	// echo " a";
+	if (strcmp($tmp,"age") == 0)
+		$_SESSION['sortby'] = "age";
+	else if (strcmp($tmp,"localisation") == 0)
+		$_SESSION['sortby'] = "localisation";
+	else if (strcmp($tmp,"popularite") == 0)
+		$_SESSION['sortby'] = "popularite";
+	else if (strcmp($tmp,"tags") == 0)
+		$_SESSION['sortby'] = "tags";
+	else
+		$_SESSION['sortby'] = "localisation";
+	// if (isset($_POST['reset'])){
+	// 	unset($_SESSION['data']);
+	// 	unset($_SESSION['sortby']);
+	// }
+	header("Location: http://localhost:8080/matcha/controler/suggest.php?".$tmp);
+}
+if (isset($_SESSION['sortby']))// && !isset($_POST['settingsform']))
 {
 	// echo $_SESSION['data']['distance'];
 	// echo "<br>";
 	// echo $_SESSION['data']['pop'];
-	echo "porteespace";
+	// echo "porteespace";
 	if (isset($_SESSION['data']))
 		$suggest = applyfilters($_SESSION['data'], $suggest, $conn);
 	$tmp = $_SESSION['sortby'];
@@ -91,6 +122,10 @@ if (isset($_SESSION['sortby']) && !isset($_POST['sort']))
 	$score_p = "Score compris entre: " . $_SESSION['data']['pop'] . ' et ' . $_SESSION['data']['pop2'];
 	$kmval = $_SESSION['data']['distance'];
 	$tagval = implode(" ", $_SESSION['data']['tag']);
+	// var_dump($tagval);
+	// var_dump($_SESSION['data']['tag']);
+	// else
+		// $tagval = '';
 }
 else{
 	$tagval = '';
@@ -101,29 +136,13 @@ else{
 	$kmval = '800';
 	$floc = 'selected';
 	usort($suggest, "cmp_km");
+	$suggest = array_merge(sort_by_tag($conn, $suggest, $user_data['tags']), $suggest);
+	$suggest = array_unique($suggest, SORT_REGULAR);
+	// $suggest = array_map("unserialize", array_unique(array_map('serialize', $suggest)));
 }
-if (isset($_POST['sort'])){
-	$data = [];
-	$data['age'] = htmlspecialchars($_POST['age']);
-	$data['age2']  = htmlspecialchars($_POST['age2']);
-	$data['distance'] = htmlspecialchars($_POST['distance']);
-	$data['pop'] = htmlspecialchars($_POST['pop']);
-	$data['pop2'] = htmlspecialchars($_POST['pop2']);
-	$data['tag'] = parse_tags(htmlspecialchars($_POST['tag']));
-	$_SESSION['data'] = parse_data($data);
- 	$tmp = htmlspecialchars($_POST['sort']);
-	if ($tmp == 'age')
-		$_SESSION['sortby'] = 'age';
-	if ($tmp == 'localisation')
-		$_SESSION['sortby'] = 'localisation';
-	if ($tmp == 'popularite')
-		$_SESSION['sortby'] = 'popularite';
-	if ($tmp == 'tags')
-		$_SESSION['sortby'] = 'tags';
-	if (isset($_POST['reset'])){
-		unset($_SESSION['data']);
-		unset($_SESSION['sortby']);
-	}
+if (isset($_POST['reset'])){
+	unset($_SESSION['data']);
+	unset($_SESSION['sortby']);
 	header("Location: http://localhost:8080/matcha/controler/suggest.php");
 }
 //else
@@ -145,7 +164,7 @@ for ($q = 0; $q < 6; $q++)
 
 // if adresse rentre das le form du profil introuvable ? 
 include('header.php');
-include ('../view/suggest.php');
+include ('../view/page_suggest.php');
 }
 
 ?>

@@ -1,28 +1,22 @@
-<div id="banniere_top">
-	<header id="header">
-		<a href ="../index.php" id = "logo">Matcha</a>
-		<div id="relou" style="padding-right: 30px;">
-		<?php 
-			if (isset($_SESSION['pseudo']) != false)
-			{ 
-		?>
-			<span id="logged-in">Bonjour <?= $_SESSION['pseudo']?></span>
-			<a href="chat.php" id = "login">Chat</a>
-			<a href="suggest.php" id = "login">Suggestions</a>
-			<a href="profile.php" id="login">Profile</a>
-			<a href="settings.php" id="login">Reglages</a>
-			<a href="logout.php" id="logout">LOGOUT</a>
-		<?php 
-			}
-			else
-			{ 
-		?>
-		<a href="signin.php" id="login">Sign IN/UP</a>
-		<?php
-			} 
-		?>
-	</header>
-</div>
+<header class="topnav" id="myTopnav">
+	<a href="javascript:void(0);" class="icon" onclick="myFunction()">
+	    <i class="fa fa-bars"></i>
+	</a>
+	
+	<?php if(isset($_SESSION['id'])){?>
+	<a href="logout.php">Deconnexion</a>
+	<a href="settings.php" class='<?=$areglages?>'>Reglages</a>
+	<a href="profile.php" class='<?=$aprofile?>'>Profile</a>
+	<a href="suggest.php" class='<?=$asuggest?>'>Suggestions</a>
+	<a href="chat.php" class='<?=$achat?>'>Chat</a>
+	<a href="notif.php" id ="bell" class='<?=$anotif?>'>
+		<img src="../ressources/img/bell.png">
+	</a>
+	<?php }else{ ?>
+	<a href="sign.php" class='<?=$alog?>'>Connexion / Inscription</a>
+	<?php } ?>
+	<a id='matchalogo' href="../index.php" class="<?=$ahome?>">Matcha</a>
 
-
- 
+</header>
+<div id="omegabox" style="display: none;">	
+</div> 

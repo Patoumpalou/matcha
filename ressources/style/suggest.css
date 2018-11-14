@@ -1,7 +1,7 @@
 #suggest_container{
 /*	padding-top:200px !important;
 */
-margin-top:200px;
+margin-top:40px;
 margin-bottom: 100px;
 }
 .card{
@@ -14,7 +14,7 @@ margin-bottom: 100px;
   border: 1px solid rgba(0,0,0,.125);
   border-radius: .25rem;
   padding: 30px;
-
+  background: #80656c;
 }
 /*.profil{
 	display: flex;
@@ -29,6 +29,11 @@ margin-bottom: 100px;
 	max-height: 70%;
 }*/
 #suggest_container.row{
+
+}
+.btn{
+  margin-left: 10px !important;
+  margin-left: 10px !important;
 
 }
 .card-text{
@@ -76,27 +81,12 @@ margin-bottom: 100px;
 
 
 
-body {
-  color: #404040;
-  font: 100 1em/150% "proxima-nova", Helvetica, sans-serif;
-}
-
 .wrapper{
   max-width: 1200px;
   margin: auto;
   //border: 1px solid red;
 }
 
-h1, h2, h3, h4 {  
-  font-weight: 900;
-  color: #333;
-  margin: 1.5em 0 0.5em;
-}
-
-h1 {font-size: 2em;}
-h2 {font-size: 1.8em;}
-h3 {font-size: 1.5em;}
-h4 {font-size: 1.3em;}
 
 strong {font-weight: 600;}
 
